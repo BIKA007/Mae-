@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Renal-Care" />
+  <title>Renal-Care — Orientation Rénale</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"SF Pro Display"', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            iosBg: '#F2F2F7',
+            iosCard: '#FFFFFF',
+            iosBorder: '#E5E5EA',
+            iosText: '#000000',
+            iosSubtext: '#8E8E93',
+            iosBlue: '#007AFF',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      background-color: #F2F2F7;
+    }
+    .radio-ios {
+      width: 20px;
+      height: 20px;
+      accent-color: #000000;
+      cursor: pointer;
+    }
+    input[type="number"], input[type="text"] {
+      font-size: 16px !important; /* Empêche le zoom auto sur iPhone */
+    }
+  </style>
+</head>
+<body class="bg-iosBg text-slate-900 font-sans min-h-full pb-12">
+
+  <!-- EN-TÊTE STYLE iOS DE VOS CAPTURES -->
+  <header class="sticky top-0 z-40 bg-iosBg/90 backdrop-blur-md border-b border-slate-200/60 px-5 py-3">
+    <div class="max-w-md mx-auto flex items-center justify-between">
+      <div class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-200/60">
+        <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+      </div>
+      <div class="text-center">
+        <h1 class="text-sm font-extrabold uppercase tracking-widest text-slate-900">RENAL-CARE</h1>
+        <p class="text-[10px] text-slate-400 font-medium">Orientation Néphrologique</p>
+      </div>
+      <div class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-200/60">
+        <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- BANNIÈRE D'AVERTISSEMENT OU NOTIFICATION -->
+  <div id="toastBanner" class="fixed top-14 inset-x-4 z-50 max-w-md mx-auto hidden">
+    <div id="toastContent" class="rounded-2xl p-3 text-xs font-semibold shadow-xl flex items-center justify-between bg-slate-900 text-white">
+      <span id="toastText"></span>
+      <button id="btnDismissToast" class="text-sm font-bold opacity-70 px-1">&times;</button>
+    </div>
+  </div>
+
+  <!-- CONTENEUR PRINCIPAL STYLE FORMULAIRE iOS -->
+  <main class="max-w-md mx-auto px-4 py-5 space-y-6">
+
+    <!-- 01 — IDENTIFICATION DU PATIENT -->
+    <section class="bg-white rounded-3xl p-5 shadow-xs border border-slate-200/70 space-y-4">
+      <h2 class="text-base font-extrabold text-slate-900">01 — Identification du patient</h2>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Âge (ans)</label>
+          <input type="number" id="patientAge" placeholder="Ex. : 62" class="w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black transition" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-2">Sexe</label>
+          <div class="flex items-center gap-6">
+            <label class="flex items-center gap-2.5 cursor-pointer text-sm font-bold text-slate-800">
+              <input type="radio" name="sexRadio" value="homme" class="radio-ios" checked />
+              <span>Homme</span>
+            </label>
+            <label class="flex items-center gap-2.5 cursor-pointer text-sm font-bold text-slate-800">
+              <input type="radio" name="sexRadio" value="femme" class="radio-ios" />
+              <span>Femme</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Poids (kg)</label>
+          <input type="number" id="patientWeight" placeholder="Ex. : 70" class="w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black transition" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 — DONNÉES ANAMNESTIQUES -->
+    <section class="bg-white rounded-3xl p-5 shadow-xs border border-slate-200/70 space-y-4">
+      <h2 class="text-base font-extrabold text-slate-900">02 — Données anamnestiques</h2>
+
+      <div class="space-y-3">
+        <label class="block text-sm font-medium text-slate-700 mb-1">Ancienneté de l'altération de la fonction rénale</label>
+
+        <div class="space-y-3 pt-1">
+          <label class="flex items-center gap-3 cursor-pointer text-sm font-semibold text-slate-800">
+            <input type="radio" name="durationRadio" value="moins_3_mois" class="radio-ios" checked />
+            <span>Moins de 3 mois</span>
+          </label>
+
+          <label class="flex items-center gap-3 cursor-pointer text-sm font-semibold text-slate-800">
+            <input type="radio" name="durationRadio" value="plus_3_mois" class="radio-ios" />
+            <span>Plus de 3 mois</span>
+          </label>
+
+          <label class="flex items-center gap-3 cursor-pointer text-sm font-semibold text-slate-800">
+            <input type="radio" name="durationRadio" value="inconnue" class="radio-ios" />
+            <span>Inconnue / Non renseignée</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 — DONNÉES BIOLOGIQUES & HÉMATIMÉTRIQUES -->
+    <section class="bg-white rounded-3xl p-5 shadow-xs border border-slate-200/70 space-y-5">
+      <h2 class="text-base font-extrabold text-slate-900">03 — Données biologiques</h2>
+
+      <!-- A. NUMÉRATION FORMULE SANGUINE (NFS) -->
+      <div class="space-y-4 pt-1">
+        <h3 class="text-sm font-extrabold text-slate-900 border-b border-slate-100 pb-2">A. Numération formule sanguine (NFS)</h3>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Catégorie du patient</label>
+          <div class="space-y-2.5">
+            <label class="flex items-center gap-3 cursor-pointer text-sm font-bold text-slate-800">
+              <input type="radio" name="categoryRadio" value="adulte" class="radio-ios" checked />
+              <span>Adulte</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer text-sm font-bold text-slate-800">
+              <input type="radio" name="categoryRadio" value="nouveau_ne" class="radio-ios" />
+              <span>Nouveau-né</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer text-sm font-bold text-slate-800">
+              <input type="radio" name="categoryRadio" value="nourrisson" class="radio-ios" />
+              <span>Nourrisson</span>
+            </label>
+          </div>
+        </div>
+
+        <div id="subSexBox" class="flex items-center gap-6 pt-1">
+          <span class="text-sm font-medium text-slate-700">Sexe</span>
+          <label class="flex items-center gap-2 cursor-pointer text-sm font-bold text-slate-800">
+            <input type="radio" name="nfsSexRadio" value="homme" class="radio-ios" checked />
+            <span>Homme</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer text-sm font-bold text-slate-800">
+            <input type="radio" name="nfsSexRadio" value="femme" class="radio-ios" />
+            <span>Femme</span>
+          </label>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Taux d'hémoglobine (g/dL)</label>
+          <input type="number" id="hbValue" step="0.1" placeholder="Ex. : 10,5" class="w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black transition font-semibold" />
+          <p id="hbRefText" class="text-xs text-slate-500 font-medium mt-1.5 pl-1">Référence : 13–18 g/dL</p>
+        </div>
+      </div>
+
+      <!-- B. CONSTANTES HÉMATIMÉTRIQUES -->
+      <div class="space-y-4 pt-3 border-t border-slate-100">
+        <h3 class="text-sm font-extrabold text-slate-900 border-b border-slate-100 pb-2">B. Constantes hématimétriques</h3>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">VGM (fL)</label>
+          <input type="number" id="vgmValue" step="0.1" placeholder="Ex. : 86" class="w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black transition" />
+          <p class="text-xs text-slate-500 font-medium mt-1.5 pl-1">Norme : 80–100 fL</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">TCMH (pg)</label>
+          <input type="number" id="tcmhValue" step="0.1" placeholder="Ex. : 29" class="w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black transition" />
+          <p class="text-xs text-slate-500 font-medium mt-1.5 pl-1">Norme : 27–32 pg</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">CCMH (g/dL)</label>
+          <input type="number" id="ccmhValue" step="0.1" placeholder="Ex. : 34" class="w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black transition" />
+          <p class="text-xs text-slate-500 font-medium mt-1.5 pl-1">Norme : 33–36 g/dL</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Réticulocytes (G/L)</label>
+          <input type="number" id="reticValue" step="1" placeholder="Ex. : 80" class="w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black transition" />
+          <p class="text-xs text-slate-500 font-medium mt-1.5 pl-1">Arégénératif &lt; 120 G/L | Régénératif &gt; 120 G/L</p>
+        </div>
+      </div>
+
+      <!-- C. BILAN BIOCHIMIQUE -->
+      <div class="space-y-3 pt-3 border-t border-slate-100">
+        <h3 class="text-sm font-extrabold text-slate-900 border-b border-slate-100 pb-2">C. Bilan biochimique</h3>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Calcémie (mg/L)</label>
+          <input type="number" id="calciumValue" step="0.1" placeholder="Ex. : 82" class="w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black transition" />
+          <p class="text-xs text-slate-500 font-medium mt-1.5 pl-1">Normale : 88–105 mg/L | Hypocalcémie &lt; 88 mg/L</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 — MORPHOLOGIE (ÉCHOGRAPHIE RÉNALE) -->
+    <section class="bg-white rounded-3xl p-5 shadow-xs border border-slate-200/70 space-y-4">
+      <h2 class="text-base font-extrabold text-slate-900">04 — Morphologie (Échographie rénale)</h2>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Taille des reins (cm)</label>
+        <input type="number" id="kidneySize" step="0.1" placeholder="Ex. : 8,5" class="w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black transition" />
+        <p class="text-xs text-slate-500 font-medium mt-1.5 pl-1">Taille normale : 10–12 cm | Atrophie &lt; 10 cm</p>
+      </div>
+    </section>
+
+    <!-- BOUTON D'ACTION DE GÉNÉRATION DU DIAGNOSTIC -->
+    <div class="space-y-3 pt-2">
+      <button id="btnGenerate" class="w-full py-4 rounded-2xl bg-black text-white font-bold text-sm shadow-md active:scale-[0.99] transition">
+        GÉNÉRER LE DIAGNOSTIC &amp; L'ORIENTATION
+      </button>
+
+      <button id="btnReset" class="w-full py-3 rounded-2xl bg-slate-200/70 text-slate-700 font-bold text-xs transition">
+        Réinitialiser les champs
+      </button>
+    </div>
+
+    <!-- ZONE DE RÉSULTAT DIAGNOSTIQUE -->
+    <section id="resultSection" class="hidden space-y-4 pt-3">
+
+      <div id="resultCard" class="bg-white rounded-3xl p-5 shadow-md border space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Verdict d'Orientation</span>
+          <span id="verdictBadge" class="px-3 py-1 rounded-full text-xs font-extrabold"></span>
+        </div>
+
+        <div>
+          <h3 id="verdictTitle" class="text-lg font-black text-slate-900 leading-tight"></h3>
+          <p id="verdictSubtitle" class="text-xs text-slate-600 font-medium mt-1 leading-relaxed"></p>
+        </div>
+
+        <div class="space-y-2 pt-2 border-t border-slate-100">
+          <p class="text-xs font-extrabold text-slate-900">Analyse détaillée axe par axe :</p>
+          <div id="criteriaList" class="space-y-1.5 text-xs"></div>
+        </div>
+      </div>
+
+      <!-- TEXTE DE SYNTHÈSE MÉDICALE POUR COPIER -->
+      <div class="bg-white rounded-3xl p-5 shadow-xs border border-slate-200/70 space-y-3">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Synthèse Clinique</h4>
+          <button id="btnCopy" class="px-3 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold shadow-xs hover:bg-black transition">
+            📋 Copier la synthèse
+          </button>
+        </div>
+        <pre id="summaryOutput" class="w-full rounded-2xl bg-slate-900 text-slate-100 p-4 text-xs font-mono whitespace-pre-wrap leading-relaxed overflow-x-auto border border-slate-800"></pre>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- LOGIQUE DE CALCUL ET INTERACTIONS -->
+  <script>
+    (function() {
+      'use strict';
+
+      // SEUILS DE RÉFÉRENCE DE L'HÉMOGLOBINE
+      const HB_REFS = {
+        adulte_homme: { min: 13, max: 18, label: 'Référence : 13–18 g/dL' },
+        adulte_femme: { min: 12, max: 16, label: 'Référence : 12–16 g/dL' },
+        nouveau_ne:   { min: 14, max: 20, label: 'Référence : 14–20 g/dL' },
+        nourrisson:   { min: 12, max: 16, label: 'Référence : 12–16 g/dL' },
+      };
+
+      // ÉLÉMENTS DU DOM
+      const dom = {
+        patientAge: document.getElementById('patientAge'),
+        patientWeight: document.getElementById('patientWeight'),
+        hbValue: document.getElementById('hbValue'),
+        vgmValue: document.getElementById('vgmValue'),
+        tcmhValue: document.getElementById('tcmhValue'),
+        ccmhValue: document.getElementById('ccmhValue'),
+        reticValue: document.getElementById('reticValue'),
+        calciumValue: document.getElementById('calciumValue'),
+        kidneySize: document.getElementById('kidneySize'),
+        hbRefText: document.getElementById('hbRefText'),
+        subSexBox: document.getElementById('subSexBox'),
+
+        btnGenerate: document.getElementById('btnGenerate'),
+        btnReset: document.getElementById('btnReset'),
+        resultSection: document.getElementById('resultSection'),
+        resultCard: document.getElementById('resultCard'),
+        verdictBadge: document.getElementById('verdictBadge'),
+        verdictTitle: document.getElementById('verdictTitle'),
+        verdictSubtitle: document.getElementById('verdictSubtitle'),
+        criteriaList: document.getElementById('criteriaList'),
+        summaryOutput: document.getElementById('summaryOutput'),
+        btnCopy: document.getElementById('btnCopy'),
+
+        toastBanner: document.getElementById('toastBanner'),
+        toastContent: document.getElementById('toastContent'),
+        toastText: document.getElementById('toastText'),
+        btnDismissToast: document.getElementById('btnDismissToast'),
+      };
+
+      // MISE À JOUR DE LA RÉFÉRENCE HÉMOGLOBINE SELON LE PROFIL
+      function updateHbReference() {
+        const category = document.querySelector('input[name="categoryRadio"]:checked')?.value || 'adulte';
+        const sex = document.querySelector('input[name="nfsSexRadio"]:checked')?.value || 'homme';
+
+        if (category === 'adulte') {
+          dom.subSexBox.classList.remove('hidden');
+          const key = `adulte_${sex}`;
+          dom.hbRefText.textContent = HB_REFS[key].label;
+        } else {
+          dom.subSexBox.classList.add('hidden');
+          dom.hbRefText.textContent = HB_REFS[category].label;
+        }
+      }
+
+      document.querySelectorAll('input[name="categoryRadio"]').forEach(el => el.addEventListener('change', updateHbReference));
+      document.querySelectorAll('input[name="nfsSexRadio"]').forEach(el => el.addEventListener('change', updateHbReference));
+      document.querySelectorAll('input[name="sexRadio"]').forEach(el => {
+        el.addEventListener('change', (e) => {
+          // Synchronise automatiquement le sexe dans la section NFS si Adulte
+          const nfsTarget = document.querySelector(`input[name="nfsSexRadio"][value="${e.target.value}"]`);
+          if (nfsTarget) nfsTarget.checked = true;
+          updateHbReference();
+        });
+      });
+
+      // AFFICHER UN TOAST
+      function showToast(msg, isSuccess = false) {
+        dom.toastText.textContent = msg;
+        dom.toastContent.className = isSuccess 
+          ? 'rounded-2xl p-3 text-xs font-semibold shadow-xl flex items-center justify-between bg-emerald-600 text-white'
+          : 'rounded-2xl p-3 text-xs font-semibold shadow-xl flex items-center justify-between bg-slate-900 text-white';
+        dom.toastBanner.classList.remove('hidden');
+        setTimeout(() => dom.toastBanner.classList.add('hidden'), 3000);
+      }
+      dom.btnDismissToast.addEventListener('click', () => dom.toastBanner.classList.add('hidden'));
+
+      // QUALIFICATION CLINIQUE DE L'ANÉMIE
+      function qualifyAnemia() {
+        const hb = parseFloat(dom.hbValue.value);
+        const vgm = parseFloat(dom.vgmValue.value);
+        const tcmh = parseFloat(dom.tcmhValue.value);
+        const ccmh = parseFloat(dom.ccmhValue.value);
+        const retic = parseFloat(dom.reticValue.value);
+
+        const category = document.querySelector('input[name="categoryRadio"]:checked')?.value || 'adulte';
+        const sex = document.querySelector('input[name="nfsSexRadio"]:checked')?.value || 'homme';
+        const ref = category === 'adulte' ? HB_REFS[`adulte_${sex}`] : HB_REFS[category];
+
+        if (isNaN(hb)) {
+          return { isAnemia: false, isNormoNormoAreg: false, label: "Hémoglobine non renseignée" };
+        }
+
+        const isAnemia = hb < ref.min;
+        if (!isAnemia) {
+          return { isAnemia: false, isNormoNormoAreg: false, label: `Pas d'anémie (Hb = ${hb} g/dL ≥ ${ref.min} g/dL)` };
+        }
+
+        const isNormocytaire = !isNaN(vgm) && vgm >= 80 && vgm <= 100;
+        const isNormochrome = (!isNaN(tcmh) && tcmh >= 27 && tcmh <= 32) || (!isNaN(ccmh) && ccmh >= 33 && ccmh <= 36);
+        const isAregenerative = !isNaN(retic) && retic < 120;
+
+        let vgmLabel = isNaN(vgm) ? 'Taille non renseignée' : (vgm < 80 ? 'Microcytaire (<80 fL)' : (vgm > 100 ? 'Macrocy
